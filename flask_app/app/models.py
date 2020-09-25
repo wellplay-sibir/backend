@@ -31,10 +31,10 @@ def check_auth(headers, name):
 
 
 class User ():
-    def __init__(self, id, username, role, id_fsso=None):
+    def __init__(self, id, number_phone, role, id_fsso=None):
         self.__id = id
         self.__id_fsso = id_fsso
-        self.__username = username
+        self.__number_phone = number_phone
         self.__role = role
         self.FSSO = None
 
@@ -42,7 +42,7 @@ class User ():
         self.__time_auth = int(time.time()) + 1800
 
     def get_username(self):
-        return self.__username
+        return self.__number_phone
 
     def get_id(self):
         return self.__id

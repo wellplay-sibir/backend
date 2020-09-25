@@ -97,11 +97,11 @@ class Database:
 
         # Структура содержащая значения для отправки
         values_data = {
-            "username": sql.Literal(data["username"])
+            "number_phone": sql.Literal(data["number_phone"])
         }
         # Структура содержащая поля для отправки
         columns = {
-            "username": sql.Identifier("username")
+            "number_phone": sql.Identifier("number_phone")
         }
 
         # Формирование выражения для условия
@@ -110,10 +110,9 @@ class Database:
             condition.append(sql.SQL("=").join(
                 val for val in [columns[key], values_data[key]]
             ))
-
         # Формирование структуры для подстановке к запросу
         values = {
-            "field": sql.SQL(",").join(sql.Identifier(i) for i in ["id", "password", "role", "status_active"]),
+            "field": sql.SQL(",").join(sql.Identifier(i) for i in ["id", "otp", "role", "status_active", "time_create_otp"]),
             "table": sql.Identifier("public", "users"),
             "condition": sql.SQL(" and ").join(cond for cond in condition)
         }
