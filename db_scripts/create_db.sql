@@ -24,3 +24,33 @@ CREATE TABLE login_logs(
     ip_address varchar(25),
     user_id bigint REFERENCES public.users(id) ON DELETE CASCADE
 );
+
+CREATE TABLE status_code(
+    id SERIAL PRIMARY KEY,
+    title varchar(25)
+);
+
+INSERT INTO status_code(title) VALUES('Принято');
+INSERT INTO status_code(title) VALUES('Отправлено');
+INSERT INTO status_code(title) VALUES('В процессе');
+INSERT INTO status_code(title) VALUES('Отклонено');
+INSERT INTO status_code(title) VALUES('На доработку');
+
+CREATE TABLE document_type(
+    id SERIAL PRIMARY KEY,
+    title varchar(25)
+);
+
+INSERT INTO document_type(title) VALUES('Копия трудовой');
+INSERT INTO document_type(title) VALUES('Паспорт');
+INSERT INTO document_type(title) VALUES('Выписка (с работы)');
+INSERT INTO document_type(title) VALUES('Дополнительный документ');
+
+CREATE TABLE documents(
+    id bigserial PRIMARY KEY,
+    hash text,
+    user_id bigint REFERENCES public.users(id) ON DELETE CASCADE,
+    document_type_id int REFERENCES public.document_type(id),
+    photo text,
+    dt_upload timestamp without time zone
+);
