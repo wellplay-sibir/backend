@@ -6,6 +6,7 @@ from psycopg2 import sql
 from app.database import Database
 from app.models import check_auth, authorize
 from app.config import config
+import crypto_file
 
 api_bp = Blueprint('api', __name__)
 
@@ -24,8 +25,14 @@ def documets():
     result = {}
 
     if request.method == "GET":
+        pk = str(crypto_file.generate_public_key()).split('\\n')
+        result = {
+            "document_type": {},
+            "public_key": ''.join(i for i in pk[1:-1])
+        }
         for row in database.select_data("SELECT id, title FROM document_type;"):
-            result[row[0]] = row[1]
+            result["document_type"][row[0]] = row[1]
+
     elif request.method == "POST":
         json = request.get_json(silent=True)
         if not json:
