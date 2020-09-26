@@ -1,6 +1,7 @@
 import os
 
 from flask import Flask
+from flask_cors import CORS
 from flask_wtf.csrf import CsrfProtect
 
 from app.router import route, csrf_exempt
@@ -11,7 +12,8 @@ from app.config import config, init_config
 def create_flask_app():
     app = Flask(__name__)
     csrf = CsrfProtect(app)
-
+    CORS(app)
+    
     route(app)
     csrf_exempt(csrf)
 
