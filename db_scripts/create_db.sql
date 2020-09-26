@@ -48,9 +48,21 @@ INSERT INTO document_type(title) VALUES('Дополнительный докум
 
 CREATE TABLE documents(
     id bigserial PRIMARY KEY,
-    hash text,
+    hash varchar(100),
     user_id bigint REFERENCES public.users(id) ON DELETE CASCADE,
     document_type_id int REFERENCES public.document_type(id),
     photo text,
     dt_upload timestamp without time zone
+);
+
+CREATE TABLE document_processing(
+    document_id bigint REFERENCES public.documents(id) ON DELETE CASCADE,
+    status_code_id int REFERENCES public.status_code(id),
+    manager_id bigint REFERENCES public.users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE comments(
+    document_id bigint REFERENCES public.documents(id) ON DELETE CASCADE,
+    manager_id bigint REFERENCES public.users(id) ON DELETE CASCADE,
+    comment text
 );
