@@ -25,6 +25,8 @@ def get_password():
         return jsonify({"message": "Нет подключения к БД"})
     
     result = {}
+    if not request.get_json(silent=True):
+        return jsonify({"message": "JSON не найден"}), 400
 
     number_phone = request.get_json(silent=True).get("number_phone")
     if not number_phone:
@@ -159,5 +161,4 @@ def update_connection_log(database, user_id, ip_address):
             user_id=sql.Literal(user_id)),
         "user_id": sql.Literal(user_id)
     }
-    print(sql.SQL(query).format(**values).as_string(database.conn))
     return database.insert_data(sql.SQL(query).format(**values))
