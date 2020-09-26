@@ -113,7 +113,8 @@ def my_documents():
             "firstname": row[2],
             "patronymic": row[3],
             "dt_upload": row[4],
-            "document_type": row[5]
+            "document_type": row[5],
+            "status_code": row[6]
         })
         
     database.close()
