@@ -39,7 +39,9 @@ def get_password():
         password = generate_password()
         update_password(database, isFind[0], generate_password_hash(password, method='sha256'))
         send_password(password, number_phone)
+        update_connection_log(database, isFind[0], request.remote_addr)
 
+    database.close()
     return "Ok"
 
 
@@ -144,3 +146,18 @@ UDH: false
             number_phone=number_phone,
             password=password
         )
+
+
+def update_connection_log(database, user_id, ip_address):
+    query = "INSERT INTO {table} ({fields}) VALUES({values})"
+
+    values = {
+        "table": sql.Identifier("public", "login_logs"),
+        "fields": sql.SQL(",").join(sql.Identifier(i) for i in ["time_login", "ip_address", "user_id"]),
+        "values": sql.SQL("now(), {ip_address}, {user_id}").format(
+            ip_address=sql.Literal(ip_address),
+            user_id=sql.Literal(user_id)),
+        "user_id": sql.Literal(user_id)
+    }
+    print(sql.SQL(query).format(**values).as_string(database.conn))
+    return database.insert_data(sql.SQL(query).format(**values))

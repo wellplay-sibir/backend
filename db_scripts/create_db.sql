@@ -18,3 +18,9 @@ CREATE TABLE users(
     role int,
     status_active boolean DEFAULT true
 );
+
+CREATE TABLE login_logs(
+    time_login timestamp without time zone,
+    ip_address varchar(25),
+    user_id bigint REFERENCES public.users(id) ON DELETE CASCADE
+);
