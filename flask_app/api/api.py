@@ -71,11 +71,12 @@ def documets():
 
 
 @api_bp.route('/status_code', methods=['GET'])
-def get_status_code():
-    user = check_auth(request.headers, __name__)
-    if user != True:
-        return user
-    user = authorize.get(request.headers.get('UserToken'))
+def get_status_code(isCall = False):
+    if not isCall:
+        user = check_auth(request.headers, __name__)
+        if user != True:
+            return user
+        user = authorize.get(request.headers.get('UserToken'))
     try:
         database = Database(config)
     except TypeError:
