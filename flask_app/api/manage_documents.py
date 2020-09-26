@@ -50,8 +50,8 @@ def free_document():
     database.close()
     return jsonify(result)
 
-@manage_document_bp.route('/my_documents', methods=['GET'])
-def my_documents():
+@manage_document_bp.route('/my_documents_processing', methods=['GET'])
+def my_documents_processing():
     user = check_auth(request.headers, __name__)
     if user != True:
         return user
