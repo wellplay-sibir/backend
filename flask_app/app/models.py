@@ -11,14 +11,12 @@ authorize = {}
 PERMISSION_AUTHORIZATION = {
     # 1 - Bank`s manager 
     # 2 - Client
-    "logout": [1, 2]
+    "logout": [1, 2],
+    "api": [2]
 }
 
 
 def check_auth(headers, name):
-    if headers.get('Token') != str(config['FLASK_APP']['FLASK_APP_SECRET_KEY']):
-        return jsonify({'message': 'Не верный Token'}), 401, {'ContentType': 'application/json'}
-
     user = authorize.get(headers.get('UserToken'))
     if user == None:
         return jsonify({'message': 'Не верный UserToken'}), 401, {'ContentType': 'application/json'}
