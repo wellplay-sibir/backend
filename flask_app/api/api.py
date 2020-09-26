@@ -97,11 +97,13 @@ def my_documents():
         u.firstname,
         u.patronymic,
         doc.dt_upload,
-		dt.title
+		dt.title,
+        sc.title
     FROM documents doc
     LEFT JOIN document_processing dp ON dp.document_id = doc.id
     LEFT JOIN users u ON u.id = doc.user_id
 	LEFT JOIN document_type dt ON dt.id = doc.document_type_id
+    LEFT JOIN status_code sc ON sc.id = dp.status_code_id
     WHERE u.id={};""".format(user.get_id())
 
     for row in database.select_data(query):
