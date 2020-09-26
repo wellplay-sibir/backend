@@ -77,6 +77,47 @@ def documets():
     return jsonify(result)
 
 
+@api_bp.route('/my_documents', methods=['GET'])
+def my_documents():
+    user = check_auth(request.headers, __name__)
+    if user != True:
+        return user
+    user = authorize.get(request.headers.get('UserToken'))
+    try:
+        database = Database(config)
+    except TypeError:
+        return jsonify({"message": "Нет подключения к БД"})
+    
+    result = []
+
+    query = """
+    SELECT 
+        doc.id,
+        u.lastname,
+        u.firstname,
+        u.patronymic,
+        doc.dt_upload,
+		dt.title
+    FROM documents doc
+    LEFT JOIN document_processing dp ON dp.document_id = doc.id
+    LEFT JOIN users u ON u.id = doc.user_id
+	LEFT JOIN document_type dt ON dt.id = doc.document_type_id
+    WHERE u.id={};""".format(user.get_id())
+
+    for row in database.select_data(query):
+        result.append({
+            "document_id": row[0],
+            "lastname": row[1],
+            "firstname": row[2],
+            "patronymic": row[3],
+            "dt_upload": row[4],
+            "document_type": row[5]
+        })
+        
+    database.close()
+    return jsonify(result)
+
+
 @api_bp.route('/status_code', methods=['GET'])
 def get_status_code(isCall = False):
     if not isCall:
