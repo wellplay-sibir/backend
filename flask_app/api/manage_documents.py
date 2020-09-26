@@ -120,10 +120,13 @@ def change_status():
 
         query = None
         values = None
-        if database.select_data(sql.SQL("SELECT status_code_id FROM document_processing WHERE document_id={document_id}").format(
+        isManager = database.select_data(sql.SQL("SELECT manager_id FROM document_processing WHERE document_id={document_id}").format(
             document_id=sql.Literal(json.get("document_id")))
-            ):
+            )
+        if isManager:
+            isManager = isManager[0][0]
 
+        if isManager == user.get_id() and isManager:
             query = "UPDATE {table} SET {fields}={values} WHERE document_id={document_id}"
 
             values = {
@@ -136,6 +139,8 @@ def change_status():
                 ]),
                 "document_id": sql.Literal(json.get("document_id"))
             }
+        elif isManager != user.get_id() and isManager:
+            return jsonify({"message": f"Документ не найден"})
         else:
             query = "INSERT INTO {table}({fields}) VALUES({values})"
 
